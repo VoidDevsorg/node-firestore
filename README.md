@@ -63,56 +63,34 @@ members.onSnapshot((data) => {
     console.log("Snapshot", data);
 });
 
+members.reset("voidpkg-test")
+    .then(() => {
 
-for (let i = 0; i < 10; i++) {
-    members.create({
-        id: `voidpkg-${i}`,
-        name: "Void Development",
-        age: 16,
-        banned: false,
-        views: [`voidpkg-${i + 5}`, `voidpkg-${i + 3}`]
-    })
-        .then((data) => {
-            console.log("Created", data);
-        });
-
-    members.update({ id: `voidpkg-${i}` }, {
-        $set: {
-            name: "Void Development"
-        },
-        $inc: {
-            age: 1
-        },
-        $push: {
-            views: `voidpkg-${i + 1}`
-        },
-        $pull: {
-            views: `voidpkg-${i + 5}`
+        for (let i = 0; i < 10; i++) {
+            members.create({
+                id: `voidpkg-${i}`,
+                name: "Void Development",
+                age: 16,
+                banned: false,
+                views: [`voidpkg-${i + 5}`, `voidpkg-${i + 3}`]
+            })
+                .then((data) => {
+                    members.updateOne({ id: `voidpkg-${i}` }, {
+                        $set: {
+                            name: "Void"
+                        },
+                        $inc: {
+                            age: 1
+                        },
+                        $push: {
+                            views: `voidpkg-${i + 1}`
+                        },
+                        $pull: {
+                            views: `voidpkg-${i + 5}`
+                        }
+                    });
+                });
         }
-    })
-        .then((data) => {
-            console.log("Updated", data);
-        });
-
-    members.findOne({ id: `voidpkg-${i}` })
-        .then((data) => {
-            console.log(data);
-        });
-}
-
-["json", "yaml", "xml"].forEach((format) => {
-    members.export({
-        format,
-        path: `./my-output/`
-    })
-        .then((data) => {
-            console.log(`Exported to ${format}`);
-        });
-});
-
-members.reset("voidpkg-test") // collection name (string)
-    .then((data) => {
-        console.log(`Database resetted`);
     });
 ```
 
